@@ -18,7 +18,7 @@ int main()
 		system("cls");
 		printf("Please enter code-word(max 7 letters): ");
 
-		while (1)
+		while (1)		//infinity loop
 		{
 			ch = _getch();
 			if (ch == 13)

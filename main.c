@@ -77,6 +77,7 @@ int main()
 			{
 				//checkLettersPossition(codeWord, codeWordCheck);
 				lifes--;
+				attempts++;
 				printf("Wrong. %d lifes left\n", lifes);
 			}
 		}

@@ -3,15 +3,16 @@
 #include <string.h>
 
 void wordleMenu();
-void checkLettersPossition(char codeWord[], char codeWordCheck[]);
+void checkLettersPossition(char codeWord[], char codeWordCheck[], char goodLetters[]);
+void displaySnakeCase(int numberOfLetters, char goodLetters[]);
 
 
 int main()
 {
 	wordleMenu();
 
-	int characterPosition = 0, lenght, attempts = 1, lifes = 7, length2;					
-	char choice, codeWord[8], codeWordCheck[8], ch;
+	int characterPosition = 0, lenght, attempts = 1, lifes = 7, length2;
+	char choice, codeWord[8], codeWordCheck[8], ch, goodLetters[8] = {0,0,0,0,0,0,0,0};
 
 	choice = _getch();
 
@@ -20,7 +21,7 @@ int main()
 		system("cls");
 		printf("Please enter code-word(max 7 letters): ");
 
-		while (1)		
+		while (1)
 		{
 			ch = _getch();
 			if (ch == 13)
@@ -66,16 +67,15 @@ int main()
 		while (lifes > 0)
 		{
 			printf("Try to guess: ");
-			scanf_s("%s", codeWordCheck, 8);						
+			scanf_s("%s", codeWordCheck, 8);
 			if (strcmp(codeWord, codeWordCheck) == 0)
 			{
-				
 				printf("GAME OVER. YOU WIN. You win in %d attempts\n", attempts);
 				return 0;
 			}
 			else
 			{
-				//checkLettersPossition(codeWord, codeWordCheck);
+				checkLettersPossition(codeWord, codeWordCheck, goodLetters);
 				lifes--;
 				attempts++;
 				printf("Wrong. %d lifes left\n", lifes);
@@ -95,29 +95,30 @@ void wordleMenu()
 	printf(" ---------------------\n\n");
 }
 
-void checkLettersPossition(char codeWord[], char codeWordCheck[]) {
-	char emptyWord[8], goodLetters[8], badLetters[8];
-	for (int i = 0; i < strlen(codeWord); i++) {
-		int isFind = 0;
-		if (codeWordCheck[i] == codeWord[i]) {
-			emptyWord[i] = codeWordCheck[i];
-			if (strchr(goodLetters, codeWordCheck[i]) != NULL) {
-				for (int j = 0; j < strlen(codeWord); j++) {
-					if (goodLetters[j] == codeWordCheck[i])
-						goodLetters[j] = ' ';
-				}
-			}
-			isFind = 1;
-		}
-		for (int j = 0; j < strlen(codeWord); j++)
-			if ((codeWordCheck[i] == codeWord[j]) && (i != j) && (strchr(badLetters, codeWordCheck[i]) == NULL)) {
-				//strncat_s(goodLetters, &codeWordCheck[i], 1);
-				isFind = 1;
-			}
+void checkLettersPossition(char codeWord[], char codeWordCheck[], char goodLetters[]) {
 
-		if ((isFind == 0) && (strchr(badLetters, codeWordCheck[i]) == NULL)) {
-			//strncat_s(badLetters, &codeWordCheck[i], 1);
+	for (int positionInCodeWord = 0; positionInCodeWord < strlen(codeWord); positionInCodeWord++) {
+		for (int positionInCodeWordCheck = 0; positionInCodeWordCheck < strlen(codeWordCheck); positionInCodeWordCheck++) {
+			if (codeWord[positionInCodeWord] == codeWordCheck[positionInCodeWordCheck]
+				&& positionInCodeWord == positionInCodeWordCheck) {
+				goodLetters[positionInCodeWord] = codeWordCheck[positionInCodeWordCheck];
+			}
+			else if(codeWord[positionInCodeWord] == codeWordCheck[positionInCodeWordCheck]) {
+				printf("%c\n", codeWord[positionInCodeWord]);
+			}
 		}
-			
+	}
+	displaySnakeCase(strlen(codeWord)-1, goodLetters);
+	printf("\n\n");
+}
+
+void displaySnakeCase(int numberOfLetters, char goodLetters[]) {
+	for (int i = 0; i <= numberOfLetters; i++){
+		if (goodLetters[i] == 0) {
+			printf("_ ");
+		}
+		else {
+			printf("%c", goodLetters[i]);
+		}	
 	}
 }
